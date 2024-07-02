@@ -1,6 +1,8 @@
 const { userInfo } = require("os");
 const { catchAsyncErrors } = require("../middlewares/catchAsyncError");
 const Student = require("../models/studentModel");
+const Internship = require("../models/internshipModel");
+const Job = require("../models/jobModel");
 const errorHandler = require("../utils/errorHandler");
 const { sendmail } = require("../utils/nodemailer");
 const { sendtoken } = require("../utils/sendToken");
@@ -14,7 +16,10 @@ exports.homepage = catchAsyncErrors(async(req, res, next) =>{
 
 exports.currentUser = catchAsyncErrors(async(req, res, next) => {
     const student = await Student.findById(req.id).exec();
-    res.json({student})
+    if(!student){
+        res.json({message: "student not found."})
+    }
+    res.json({student});
 });
 
 exports.studentsignup = catchAsyncErrors(async(req, res, next) =>{
@@ -116,5 +121,39 @@ exports.studentavatar = catchAsyncErrors(async (req, res, next) => {
     res.status(200).json({
         success: true,
         message: "Student avatar successfully uploaded",
+    });
+});
+
+// -------apply internship------
+exports.applyinternship = catchAsyncErrors(async (req, res, next) => {
+    const student = await Student.findById(req.id).exec();
+    const internship = await Internship.findById(req.params.internshipid).exec();
+
+    student.internships.push(internship._id);
+    internship.students.push(student._id);
+    await student.save();
+    await internship.save();
+
+    res.json({student, internship})
+})
+
+// ----------apply job----------
+exports.applyjob = catchAsyncErrors(async (req, res, next) => {
+    const student = await Student.findById.exec();
+    const job = await Job.findById(req.params.jobid).exec();
+
+    student.jobs.push(job._id);
+    job.students.push(student._id);
+    await student.save();
+    await job.save();
+
+    res.json({student, job});
+});
+
+// ------------------delete student ----------------
+exports.deletestudent = catchAsyncErrors(async (req, res, next) => {
+    const student = await Student.findByIdAndDelete(req.params.studentid).exec();
+    res.status(200).json({
+        message:"Student deleted Successfully!"
     });
 });

@@ -60,8 +60,13 @@ const studentModel = new mongoose.Schema({
         projects: [],
         skills: [],
         accomplishments: [],
-    }
-    
+    },
+    internships: [
+        {type: mongoose.Schema.Types.ObjectId, ref: "internship"},
+    ],
+    jobs: [
+        {type: mongoose.Schema.Types.ObjectId, ref: "job"},
+    ],
 },
 
 {timestamps: true});

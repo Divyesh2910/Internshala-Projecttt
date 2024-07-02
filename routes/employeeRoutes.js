@@ -17,7 +17,9 @@ const {
     readsingleinternship,
     createjob,
     readjob,
-    readsinglejob
+    readsinglejob,
+    deleteemployee
+    
 } = require("../controllers/employeeController");
 const { isAuthenticated } = require("../middlewares/auth");
 
@@ -74,5 +76,8 @@ router.post("/job/read", isAuthenticated, readjob);
 
 //POST /employee/job/read/:id
 router.post("/job/read/:id", isAuthenticated, readsinglejob);
+
+// GET /employee/delete/:employeeid
+router.get("/employee/delete/:employeeid", isAuthenticated, deleteemployee);
 
 module.exports = router;

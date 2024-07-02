@@ -164,3 +164,11 @@ exports.readsinglejob = catchAsyncErrors(async(req, res, next) =>{
     const job = await Job.findById(req.params.id).exec();
     res.status(200).json({success: true, job});
 });
+
+// ------------------delete employee ----------------
+exports.deleteemployee = catchAsyncErrors(async (req, res, next) => {
+    const employee = await Employee.findByIdAndDelete(req.params.employeeid).exec();
+    res.status(200).json({
+        message:"Employee deleted Successfully!"
+    });
+});
